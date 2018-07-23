@@ -65,13 +65,15 @@
             </div>
         
         </div>
+        
         <!--  Slide Text  -->
         <div class="carousel-caption d-none d-md-block" style="left: 10%; right: auto; text-align: left; padding: 30px">
             <h1>{{ slide.slideheader }} 
-                <button class="btn btn-success"><a href="http://128.210.129.12/axis-cgi/mjpg/video.cgi">Camera</a></button>
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#liveCam">Camera</button>
             </h1>
             <hr class="divide-divider">
             <h2>{{ slide.slidedescrb }}</h2>
+            
         </div>
         
         <!--  Show on small screen  -->
@@ -177,4 +179,31 @@
     </div>
 </div>
 
+
+<!--  The Live_cam Modal -->
+  <div class="modal fade" id="liveCam">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Modal Heading</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+            <center><img src="http://128.210.129.12/axis-cgi/mjpg/video.cgi"></center>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
 {% endblock %}
+

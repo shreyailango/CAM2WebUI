@@ -477,19 +477,18 @@ See [this post](https://support.google.com/fusiontables/answer/1244603?hl=en)
 
 ## Populating Googlesheet with metadata from CAM2 API database
 
-CAM2 released an [API](https://purduecam2project.github.io/CameraDatabaseAPI/) to access CAM2 camera database. In the *gdrive* folder, you will find `api_getter.py` which was created to ease the process of getting all Cameras. The script can be useful when there is a need to refresh the Googlesheet and Google Fusion Table of the map. You only need to run the script through terminal.
+CAM2 released an [API](https://purduecam2project.github.io/CameraDatabaseAPI/) to access CAM2 camera database. In the *api2fusion* folder, you will find `api_getter.py` which was created to ease the process of getting all Cameras. The script can be useful when there is a need to refresh the Googlesheet and Google Fusion Table of the map. You only need to run the script through terminal.
 
 <div class="admonition note">
 <p class="first admonition-title">Script Process</p>
 <p class="last">The script handles the following:</p>
 
-- Token authentication process
 
-- running cameras <code>Search</code> request
+- Running cameras <code>Search</code> request
 
-- writing to spreadsheet locally
+- Writing to spreadsheet locally
 
-- uploading the content of local spreadsheet to Googlesheet
+- Uploading the content of local spreadsheet to Googlesheet
 </div>
 
 
@@ -518,9 +517,10 @@ Run the ```export <env_var_name>=<env_var_value>``` command for each one of the 
 <tr class="row-even"><td><code class="code docutils literal"><span class="pre">TOTAL_NO_CAMERAS</span></code></td>
 <td>Number of cameras. <em>clarify with team Slack channel</em> </td>
 </tr>
-<tr class="row-odd"><td><code class="code docutils literal"><span class="pre">SPREADSHEET_FILE_ID</span> </code></td>
+<tr class="row-odd"><td><code class="code docutils literal"><span class="pre">FILE_ID</span> </code></td>
 <td>The file id of Googlesheet that will be populated. <br>To populate Googlesheet use in production, <br> get the file id from team Slack channel </td>
 </tr>
+
 
 </tbody>
 </table>
@@ -531,25 +531,35 @@ Run the ```export <env_var_name>=<env_var_value>``` command for each one of the 
 </div>
 
 
-### Google Oauth for updating Googlesheet
-You will need an Oauth credential to update a Googlesheet. Do so by [enabling Google API](#enable-google-api). Then, Continue the following step
-1. At the right end of your client ID, click the download icon. A JSON file has name starts with *client_secret...*  will be downloaded to your computer. Change the name to *client_secret.json* and move it to the *gdrive* folder.
+### Google service account for updating Googlesheet
+You will need a service account to run the script. You can create service account credentials from [Google Developer's Console](https://console.cloud.google.com/).
+
+The service account allows for server to server communication without the user being involved. You can refer to [this page] (https://cloud.google.com/iam/docs/service-accounts) 
+for more detail.
+
+The reason we opted for service accounts is to bypass the authorization page that is required when you use regular client secret credentials. This will the script to be run automatically on a server without
+users being involved in authorizing.
+
 
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p> Do not push your <code>client_secret.json</code> to the repository because it contains your personal Google Oauth credentials and <code>cam_data.csv</code>, the local spreadsheet containing cameras metadata</p>
+<p> Do not push your <code>service.json</code> to the repository because it contains your personal Google credentials and <code>cam_data.csv</code>, the local spreadsheet containing cameras metadata</p>
 </div>
 
 ### Run the script
 ```
-python api_getter.py
+cd api2fusion
+pip3 install -r requirements.txt
+python3 api_getter.py
 ```
 The script will run for a few minutes, depends on how big the number of cameras being requested.
 
 ### Adding parameters
-You might need to populate the spreadsheet with certain parameters that has not been implemented on the script. To do this, you have to adjust the code in ```api_getter.py``` in the ```write_csv()``` function.
+You might need to populate the spreadsheet with certain parameters that has not been implemented on the script. To do this, you have to adjust the code in ```api_getter.py``` by modifying the ```SHEET_HEADERS``` dictionary
+at the top of the script. If you need to add a new parameter, you have to set the key (which will be the name of the column in the csv file) to its corresponding parameter from the API response.
+
 
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p>For every new parameters added, each parameter needs to be checked for <code>none</code> and to be handled properly. For parameters detail, check the <a href="https://purduecam2project.github.io/CameraDatabaseAPI/#api-cameras-getCamerasByRadius">API documentation</a> </p>
+<p>For every new parameters added, each parameter needs to be checked for <code>None</code> and to be handled properly. For parameters detail, check the <a href="https://purduecam2project.github.io/CameraDatabaseAPI/#api-cameras-getCamerasByRadius">API documentation</a> </p>
 </div>

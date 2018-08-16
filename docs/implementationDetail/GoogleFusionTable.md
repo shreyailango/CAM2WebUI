@@ -534,7 +534,7 @@ Run the ```export <env_var_name>=<env_var_value>``` command for each one of the 
 ### Google service account for updating Googlesheet
 You will need a service account to run the script. You can create service account credentials from [Google Developer's Console](https://console.cloud.google.com/).
 
-The service account allows for server to server communication without the user being involved. You can refer to [this page] (https://cloud.google.com/iam/docs/service-accounts) 
+The service account allows for server to server communication without the user being involved. You can refer to [this page](https://cloud.google.com/iam/docs/service-accounts) 
 for more detail.
 
 The reason we opted for service accounts is to bypass the authorization page that is required when you use regular client secret credentials. This will the script to be run automatically on a server without
